@@ -4,7 +4,7 @@ require "codegraph/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "codegraph"
+  s.name        = "ruby-codegraph"
   s.version     = CodeGraph::VERSION
   s.authors     = ["Jan Xie"]
   s.email       = ["jan.h.xie@gmail.com"]

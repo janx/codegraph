@@ -3,20 +3,27 @@ Graph For Your Ruby Code
 
 Use `graphviz` to generate class inheritance graph for your ruby code.
 
+Install
+-------
+
+```shell
+gem install ruby-codegraph
+```
+
 Usage
 -----
 
 Basic usage:
 
 ```shell
-> codegraph <dir>
-> open output.png
+codegraph <dir>
+open output.png
 ```
 
 Get help:
 
 ```shell
-> codegraph -h
+codegraph -h
 ```
 
 Copyright
