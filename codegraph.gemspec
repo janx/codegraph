@@ -12,6 +12,8 @@ Gem::Specification.new do |s|
   s.summary     = "Generate graphviz graphs for your code."
   s.description = "Use codegraph to generate all kinds of graphviz graphs for you code, to visualize things like class hierarchy."
 
+  s.executables = %w(codegraph)
+  s.default_executable = "codegraph"
   s.files = Dir["{lib,bin}/**/*"] + ["LICENSE", "README.markdown"]
 
   s.add_dependency "ruby-graphviz", ">= 1.0.0"
