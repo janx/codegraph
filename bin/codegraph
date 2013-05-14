@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+$:.push File.expand_path("../../lib", __FILE__)
+
+require 'optparse'
+require 'codegraph'
+
+options = {
+  graph_name: 'Code Graph',
+  engine: 'dot',
+  type: 'inheritance',
+  output: 'output',
+  format: 'png'
+}
+
+OptionParser.new do |opts|
+  opts.banner = <<USAGE
+Usage:
+
+  codegraph [options] <directory>
+
+USAGE
+
+  opts.separator "Options:"
+
+  opts.on("-n", "--name [NAME]", "Specify graph name") do |v|
+    options[:graph_name] = v
+  end
+
+  opts.on("-o", "--output [FILE]", "Specify a output file") do |v|
+    options[:output] = v
+  end
+
+  opts.on("-f", "--format [FORMAT]", "Specify the format of output, default to PNG") do |v|
+    options[:format] = v
+  end
+
+  opts.on("-t", "--type [TYPE]", %w(inheritance), "Graph type (inheritance). Default to inheritance") do |v|
+    options[:type] = v
+  end
+
+  opts.on("-e", "--engine [ENGINE]", %w(dot neato twopi fdp circo), "Layout engine for graphviz (dot, neato, twopi, fdp, circo), default to dot") do |v|
+    options[:engine] = v
+  end
+
+  opts.on("-v", "--version", "Show version") do |v|
+    puts "CodeGraph v#{CodeGraph::VERSION}"
+  end
+end.parse!
+
+if ARGV.size < 1
+  STDERR.puts "Error: You must supply a directory. Type 'codegraph -h' to get more information."
+  exit 1
+end
+
+klass = CodeGraph.const_get(options[:type].capitalize)
+graph = klass.new(ARGV[0], options)
+graph.generate
