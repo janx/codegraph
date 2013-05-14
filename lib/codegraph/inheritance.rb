@@ -33,7 +33,8 @@ module CodeGraph
     end
 
     def label
-      strs = ["", "#{@options[:graph_name]} for #{File.expand_path @dir} at #{Time.now}"]
+      strs = ["", "#{@options[:graph_name]} at #{File.expand_path @dir}"]
+      strs << Time.now
       strs << LABEL_FOOTER unless @options[:no_label_footer]
       strs.join("\n")
     end
