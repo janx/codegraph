@@ -22,4 +22,4 @@ Get help:
 Copyright
 ---------
 
-[MIT License](https://github.com/janx/codegraph/LICENSE)
+[MIT License](https://github.com/janx/codegraph/blob/master/LICENSE)
