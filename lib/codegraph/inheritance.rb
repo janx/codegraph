@@ -27,7 +27,7 @@ module CodeGraph
     private
 
     def label
-      "#{@options[:graph_name]} for #{@dir} at #{Time.now}"
+      "#{@options[:graph_name]} for #{File.expand_path @dir} at #{Time.now}"
     end
 
     def directory_scan
