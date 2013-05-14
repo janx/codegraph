@@ -10,7 +10,9 @@ options = {
   engine: 'dot',
   type: 'inheritance',
   output: 'output',
-  format: 'png'
+  format: 'png',
+  label: true,
+  label_footer: true
 }
 
 OptionParser.new do |opts|
@@ -41,6 +43,14 @@ USAGE
 
   opts.on("-e", "--engine [ENGINE]", %w(dot neato twopi fdp circo), "Layout engine for graphviz (dot, neato, twopi, fdp, circo), default to dot") do |v|
     options[:engine] = v
+  end
+
+  opts.on("--no-label", "Disable graph label") do |v|
+    options[:no_label] = true
+  end
+
+  opts.on("--no-label-footer", "Disable graph label footer (an url to codegraph repo)") do |v|
+    options[:no_label_footer] = true
   end
 
   opts.on("-v", "--version", "Show version") do |v|

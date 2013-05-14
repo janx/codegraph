@@ -7,16 +7,11 @@ module CodeGraph
     def initialize(dir, options={})
       @dir = dir
       @options = options
+
       @nodes = {}
       @edges = {}
 
-      @g = GraphViz.new(
-        @options[:graph_name],
-        label: label,
-        type: :digraph,
-        use: @options[:engine],
-        rankdir: 'RL'
-      )
+      @g = GraphViz.new(@options[:graph_name], graphviz_options)
     end
 
     def generate
@@ -26,8 +21,21 @@ module CodeGraph
 
     private
 
+    def graphviz_options
+      options = {
+        type: :digraph,
+        use: @options[:engine],
+        rankdir: 'RL'
+      }
+
+      options[:label] = label unless @options[:no_label]
+      options
+    end
+
     def label
-      "#{@options[:graph_name]} for #{File.expand_path @dir} at #{Time.now}"
+      strs = ["", "#{@options[:graph_name]} for #{File.expand_path @dir} at #{Time.now}"]
+      strs << LABEL_FOOTER unless @options[:no_label_footer]
+      strs.join("\n")
     end
 
     def directory_scan
