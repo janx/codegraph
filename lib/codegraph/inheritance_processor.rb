@@ -2,7 +2,6 @@ require 'sexp_processor'
 
 module CodeGraph
   class InheritanceProcessor < SexpProcessor
-    attr :classes
 
     def initialize
       super
@@ -12,25 +11,9 @@ module CodeGraph
       @classes = {}
     end
 
-    alias :_process :process
-    def process(exp)
-      _process(exp)
+    def classes
       fix_parents
-      classes
-    end
-
-    def fix_parents
-      @classes.each do |klass, parent|
-        @classes[klass] = best_fit_name(parent)
-      end
-    end
-
-    def best_fit_name(parent)
-      loop do
-        return parent if @classes.keys.include?(parent)
-        return parent if parent !~ /::/
-        parent = parent.split('::', 2)[1]
-      end
+      @classes
     end
 
     def process_const(exp)
@@ -53,7 +36,7 @@ module CodeGraph
       add_class atom(klass), atom(parent)
 
       @scopes.push klass
-      processed = [directive, klass, parent].concat(extra.map{|e| _process(e)})
+      processed = [directive, klass, parent].concat(extra.map{|e| process(e)})
       @scopes.pop
 
       s(*processed)
@@ -65,7 +48,7 @@ module CodeGraph
       exp.clear
 
       @scopes.push klass
-      processed = [directive, klass].concat(extra.map{|e| _process(e)})
+      processed = [directive, klass].concat(extra.map{|e| process(e)})
       @scopes.pop
 
       s(*processed)
@@ -87,9 +70,24 @@ module CodeGraph
 
     def atom(exp)
       if exp.is_a?(Sexp)
-        _process(exp)
+        process(exp)
       else
         exp
+      end
+    end
+
+    def fix_parents
+      @classes.each do |klass, parent|
+        @classes[klass] = best_fit_name(parent)
+      end
+    end
+
+    def best_fit_name(parent)
+      orig = parent
+      loop do
+        return parent if @classes.keys.include?(parent)
+        return orig if parent !~ /::/
+        parent = parent.split('::', 2)[1]
       end
     end
 
