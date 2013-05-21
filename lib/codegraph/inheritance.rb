@@ -1,3 +1,6 @@
+require 'ruby_parser'
+require File.expand_path('../inheritance_processor', __FILE__)
+
 module CodeGraph
 
   class Inheritance
@@ -11,6 +14,7 @@ module CodeGraph
       @nodes = {}
       @edges = {}
 
+      @processor = InheritanceProcessor.new
       @g = GraphViz.new(@options[:graph_name], graphviz_options)
     end
 
@@ -40,18 +44,16 @@ module CodeGraph
     end
 
     def directory_scan
-      Dir["#{@dir}/**/*.rb"].each {|rb| class_scan(rb)}
-    end
+      Dir["#{@dir}/**/*.rb"].each do |rb|
+        sexp = RubyParser.new.parse File.read(rb)
+        @processor.process(sexp)
+      end
 
-    def class_scan(file)
-      File.readlines(file).each do |line|
-        _, klass, parent = line.match(CLASS_REGEXP).to_a
-        if klass
-          add_node(klass)
-          if parent
-            add_node(parent)
-            add_edge(klass, parent)
-          end
+      @processor.classes.each do |klass, parent|
+        add_node(klass)
+        if parent
+          add_node(parent)
+          add_edge(klass, parent)
         end
       end
     end

@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
   s.files = Dir["{lib,bin}/**/*"] + ["LICENSE", "README.markdown"]
 
   s.add_dependency "ruby-graphviz", ">= 1.0.0"
+  s.add_dependency "ruby_parser", ">= 3.0.0"
 end
