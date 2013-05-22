@@ -57,7 +57,9 @@ module CodeGraph
     private
 
     def add_class(klass, parent)
-      @classes[full_name(klass)] = full_name(parent)
+      key = full_name(klass)
+      return if @classes.has_key?(key) && !parent
+      @classes[key] = full_name(parent)
     end
 
     def full_name(exp)

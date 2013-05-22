@@ -46,4 +46,15 @@ class InheritanceProcessorTest < Test::Unit::TestCase
     assert_equal({"Seo::SearchResult"=>"Seo::Seo::Base"}, processor.classes)
   end
 
+  def test_multiple_definitions
+    sexp = RubyParser.new.parse <<-EOF
+    class B; end
+    class A < B; end
+    class A; end
+    EOF
+    processor = CodeGraph::InheritanceProcessor.new
+    processor.process(sexp)
+    assert_equal({"B"=>nil, "A"=>"B"}, processor.classes)
+  end
+
 end
